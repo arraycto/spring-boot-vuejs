@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+  <Properties>
+    <Property name="baseDir">logs</Property>
+    <Property name="appName">spring-boot-vuejs</Property>
+    <!-- 不要换行，以免影响日志输出格式 -->
+    <Property name="consolePatternLayout">
+      %style{%d{yyyy-MM-dd HH:mm:ss}{GMT+8}}{dim} %highlight{%-5level}{FATAL=bright red, ERROR=bright red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=bright black} [%style{%t}{bright,blue}] %style{%C{1.}}{bright,Magenta}: %msg%n%throwable
+    </Property>
+    <!-- 不要换行，以免影响日志输出格式 -->
+    <Property name="filePatternLayout">
+      %d{yyyy-MM-dd HH:mm:ss}{GMT+8} %-5level [%t] %C{1.}: %msg%n%throwable
+    </Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${consolePatternLayout}" disableAnsi="false"/>
+    </Console>
+
+    <!-- 根据当前年和月生成存档文件的目录和文件名 -->
+    <RollingFile name="RollingFile" fileName="${baseDir}/${appName}.log"
+      filePattern="${baseDir}/$${date:yyyy-MM}/${appName}-%d{yyyy-MM-dd}-%i.log.gz">
+
+      <PatternLayout pattern="${filePatternLayout}"/>
+
+      <!-- 在转存时删除 ${baseDir} 目录下与 */${appName}-*.log.gz 全局匹配且已存在 60 天或以上的所有文件 -->
+      <DefaultRolloverStrategy>
+        <Delete basePath="${baseDir}" maxDepth="2">
+          <IfFileName glob="*/${appName}-*.log.gz"/>
+          <IfLastModified age="60d"/>
+        </Delete>
+      </DefaultRolloverStrategy>
+
+      <!-- 组合多个触发策略，如果任何配置的策略返回 true，则返回 true -->
+      <Policies>
+        <!-- 每天午夜转存日志触发器 -->
+        <CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+        <!-- 当文件达到 500 MB 时转存日志 -->
+        <SizeBasedTriggeringPolicy size="500 MB"/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <!-- 记录 TRACE 级别或以上的日志 -->
+    <Root level="trace">
+      <!-- 控制台只记录 INFO 级别或以上的日志 -->
+      <AppenderRef ref="Console" level="info"/>
+      <!-- 文件只记录 WARN 级别或以上的日志 -->
+      <AppenderRef ref="RollingFile" level="warn"/>
+    </Root>
+  </Loggers>
+</Configuration>

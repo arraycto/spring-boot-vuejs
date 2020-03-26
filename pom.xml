@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.wuxianjie</groupId>
+  <artifactId>spring-boot-vuejs</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>spring-boot-vuejs</name>
+  <description>整合 Vue.js 前端模块与 Spring Boot 后端模块的 Maven 父 pom</description>
+
+  <modules>
+    <module>frontend</module>
+    <module>backend</module>
+  </modules>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.2.5.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <!-- TODO: 测试看删除后有无问题 -->
+  <!--<properties>
+    <main.basedir>${project.basedir}</main.basedir>
+  </properties>-->
+</project>

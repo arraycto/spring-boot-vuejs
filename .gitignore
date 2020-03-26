@@ -1,0 +1,12 @@
+### IntelliJ IDEA ###
+.idea/
+*.iml
+
+### 后端项目 ###
+backend/src/main/resources/public/
+backend/target/
+
+### 前端项目 ###
+frontend/node/
+frontend/node_modules/
+frontend/target/

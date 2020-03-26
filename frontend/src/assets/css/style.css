@@ -1,0 +1,22 @@
+/* NProgress */
+#nprogress .bar {
+  background: #1DA57A !important;
+}
+
+/* 调整 Ant Design 样式 */
+.ant-spin-container {
+  height: 100%;
+}
+
+/* 自定义样式 */
+.h100 {
+  height: 100%;
+}
+
+.footer {
+  text-align: center;
+}
+
+.copyright {
+  color: rgba(0, 0, 0, .45);
+}
