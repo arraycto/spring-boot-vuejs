@@ -1,6 +1,5 @@
 // 多页面配置
 const titles = require('./title.js');
-// noinspection NpmUsedModulesInstalled
 const glob = require('glob');
 const pages = {};
 

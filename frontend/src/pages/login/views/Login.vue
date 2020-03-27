@@ -23,7 +23,6 @@
 
 <script>
   import Vue from 'vue';
-  // noinspection ES6CheckImport
   import { FormModel, Input, Icon, Button, Alert } from 'ant-design-vue';
 
   Vue.use(FormModel);
