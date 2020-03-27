@@ -9,7 +9,6 @@ import lombok.ToString;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 @AllArgsConstructor
 @ToString
 public enum RestCodeEnum {

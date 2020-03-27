@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 public class CacheManager {
 
   /**
@@ -26,7 +25,6 @@ public class CacheManager {
       // 30 分钟有效期的 TTL 缓存
       .expireAfterWrite(30, TimeUnit.MINUTES)
       .build(new CacheLoader<String, Object>() {
-        @SuppressWarnings("NullableProblems")
         @Override
         public Object load(String key) {
           return null;

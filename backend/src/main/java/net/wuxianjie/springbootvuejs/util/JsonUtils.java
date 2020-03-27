@@ -14,7 +14,6 @@ import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 public class JsonUtils {
 
   private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
@@ -50,7 +49,7 @@ public class JsonUtils {
    * @throws JsonException 当 JSON 反序列化失败时抛出
    */
   public static <T> T parseJson(String json, Class<T> valueType, boolean isDateReadable) {
-    ObjectMapper mapper = JsonUtils.getObjectMapper(json, valueType, isDateReadable);
+    ObjectMapper mapper = JsonUtils.getObjectMapper(isDateReadable);
     try {
       return mapper.readValue(json, valueType);
     } catch (IOException e) {
@@ -63,7 +62,7 @@ public class JsonUtils {
    *
    * <p>例如，实例化对泛型类型 {@code List<Integer>} 的引用：</p>
    *
-   * <p>{@code TypeReference ref = new TypeReference<List<Integer>>() { };}</p>
+   * <p>{@code TypeReference<List<Integer>> ref = new TypeReference<List<Integer>>() { };}</p>
    *
    * @param json           需要 JSON 反序列化的字符串
    * @param ref            JSON 反序列化后所得到对象的类型，支持完整泛型类型信息
@@ -72,7 +71,7 @@ public class JsonUtils {
    * @throws JsonException 当 JSON 反序列化失败时抛出
    */
   public static <T> T parseJson(String json, TypeReference<T> ref, boolean isDateReadable) {
-    ObjectMapper mapper = JsonUtils.getObjectMapper(json, ref, isDateReadable);
+    ObjectMapper mapper = JsonUtils.getObjectMapper(isDateReadable);
     try {
       return mapper.readValue(json, ref);
     } catch (IOException e) {
@@ -80,7 +79,7 @@ public class JsonUtils {
     }
   }
 
-  private static ObjectMapper getObjectMapper(String json, Object type, boolean isDateReadable) {
+  private static ObjectMapper getObjectMapper(boolean isDateReadable) {
     ObjectMapper mapper = new ObjectMapper();
     if (isDateReadable) {
       DateFormat df = new SimpleDateFormat(JsonUtils.DATE_TIME_PATTERN);

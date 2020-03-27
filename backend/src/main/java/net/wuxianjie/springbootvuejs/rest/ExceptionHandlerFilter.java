@@ -28,10 +28,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ExceptionHandlerFilter implements Filter {
 
-  private static final String HTTP_HEADER_ACCEPT = "Accept";
-
   @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
+  public void init(FilterConfig filterConfig) {
 
   }
 
@@ -43,8 +41,8 @@ public class ExceptionHandlerFilter implements Filter {
     try {
       chain.doFilter(request, response);
     } catch (RuntimeException e) {
-      RestResult<Void> result = getRestResult(httpServletRequest, httpServletResponse, e);
-      handleResponse(httpServletResponse, result, e);
+      RestResult<Void> result = getRestResult(httpServletRequest, e);
+      handleResponse(httpServletResponse, result);
     }
   }
 
@@ -53,7 +51,7 @@ public class ExceptionHandlerFilter implements Filter {
 
   }
 
-  private RestResult<Void> getRestResult(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, RuntimeException e) {
+  private RestResult<Void> getRestResult(HttpServletRequest httpServletRequest, RuntimeException e) {
     // 记录过滤器链中出现的运行时异常日志
     if (!(e instanceof AuthenticationException)) {
       // 记录非鉴权失败的日志
@@ -63,8 +61,7 @@ public class ExceptionHandlerFilter implements Filter {
     return new RestResult<>(RestCodeEnum.ERROR, e.getMessage());
   }
 
-  private void handleResponse(HttpServletResponse httpServletResponse, RestResult<Void> result,
-      RuntimeException e)
+  private void handleResponse(HttpServletResponse httpServletResponse, RestResult<Void> result)
       throws IOException {
     httpServletResponse.setHeader("Content-Type", "application/json; charset=utf8");
     httpServletResponse.getWriter().write(JsonUtils.toJson(result, true));

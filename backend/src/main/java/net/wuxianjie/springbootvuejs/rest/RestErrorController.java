@@ -29,7 +29,7 @@ public class RestErrorController implements ErrorController {
     String errorMessage = (String) errorMap.get("message");
     String errorType = (String) errorMap.get("error");
     int httpStatus = (int) errorMap.get("status");
-    String message = String.format("请求【%s】时出错，错误消息【%s】（类型【%s】，HTTP 状态码【%d】)", path, errorMessage, errorType, httpStatus);
+    String message = String.format("请求【%s】时出错，错误消息【%s】（类型【%s】，HTTP 状态码【%d】）", path, errorMessage, errorType, httpStatus);
     return new RestResult<>(RestCodeEnum.ERROR, message);
   }
 

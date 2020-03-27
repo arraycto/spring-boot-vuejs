@@ -17,7 +17,6 @@ import net.wuxianjie.springbootvuejs.util.ApplicationContextHolder;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 public class JwtManager {
 
   /**
@@ -96,7 +95,7 @@ public class JwtManager {
    * 验证 JWT
    *
    * @param accessToken 需要验证的 token
-   * @return 非 {@code null} 的 {@link Map}，包含了在令牌中定义的声明
+   * @return 非 {@code null} 的 {@link Map}，包含了在 JWT 中定义的声明
    * @throws AuthenticationException 当 JWT 验证失败时抛出
    */
   public Map<String, Claim> verifyAccessToken(String accessToken) {

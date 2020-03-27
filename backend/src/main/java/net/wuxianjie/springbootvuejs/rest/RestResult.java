@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

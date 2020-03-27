@@ -41,7 +41,6 @@ import org.apache.http.util.EntityUtils;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 public class HttpUtils {
 
   /**
@@ -177,7 +176,7 @@ public class HttpUtils {
    * 执行请求
    *
    * @param headers         请求头
-   * @param httpMethod      {@link HttpUriRequest}
+   * @param httpMethod      请求方法
    * @param responseCharset 响应编码
    * @return 从服务器返回的结果字符串
    * @throws HttpException 当请求失败时
@@ -221,11 +220,10 @@ public class HttpUtils {
   /**
    * 获取兼容 http 和 https 请求的 {@code httpClient}
    *
-   * @return {@link CloseableHttpClient}
-   * @throws NoSuchAlgorithmException
-   * @throws KeyManagementException
+   * @return HTTP 请求对象
+   * @throws NoSuchAlgorithmException 当 TLS 协议获取失败时
+   * @throws KeyManagementException   当初始化 SSL 上下文失败时
    */
-  @SuppressWarnings("JavaDoc")
   private static CloseableHttpClient getHttpClient() throws NoSuchAlgorithmException, KeyManagementException {
     SSLContext sslContext = SSLContext.getInstance("TLS");
     // 初始化 SSL 上下文

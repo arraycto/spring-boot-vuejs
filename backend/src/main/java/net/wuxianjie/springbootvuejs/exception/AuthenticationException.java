@@ -7,7 +7,6 @@ import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 public class AuthenticationException extends BaseException {
 
   public AuthenticationException(String message, RestCodeEnum code) {

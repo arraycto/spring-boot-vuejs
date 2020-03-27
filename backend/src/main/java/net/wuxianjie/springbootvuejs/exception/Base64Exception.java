@@ -7,7 +7,6 @@ import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
  *
  * @author 吴仙杰
  */
-@SuppressWarnings("unused")
 public class Base64Exception extends BaseException {
 
   public Base64Exception(String message, RestCodeEnum code) {

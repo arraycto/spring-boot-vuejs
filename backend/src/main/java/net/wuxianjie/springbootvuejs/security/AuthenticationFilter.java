@@ -50,7 +50,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   /**
    * 判断当前请求是否需要鉴权
    *
-   * @param request {@link HttpServletRequest}
+   * @param request HTTP 请求对象
    * @return 若需要鉴权，则返回 {@code true}；否则返回 {@code false}
    */
   private boolean isNeedAuthentication(HttpServletRequest request) {
@@ -68,8 +68,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
    * 鉴权操作
    *
    *
-   * @param request {@link HttpServletRequest}
-   * @return {@link UsernamePasswordAuthenticationToken}
+   * @param request HTTP 请求对象
+   * @return 表示验证通过后，包含用户名、密码和角色的对象
    */
   private UsernamePasswordAuthenticationToken authentication(HttpServletRequest request) {
     // 1、验证 HTTP URL 中是否存在 `access_token`

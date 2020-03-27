@@ -1,6 +1,7 @@
 package net.wuxianjie.springbootvuejs.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * 有关数学运算的工具类
@@ -52,7 +53,7 @@ public class MathUtils {
    */
   public static double divide(double dividend, double divisor, int scale) {
     return BigDecimal.valueOf(dividend)
-        .divide(BigDecimal.valueOf(divisor), scale, BigDecimal.ROUND_HALF_UP)
+        .divide(BigDecimal.valueOf(divisor), scale, RoundingMode.HALF_UP)
         .doubleValue();
   }
 

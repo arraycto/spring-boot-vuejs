@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * TOKEN 管理控制器
+ *
+ * @author 吴仙杰
+ */
 @RestController
 @RequestMapping("/api")
 public class TokenController {
@@ -23,6 +28,15 @@ public class TokenController {
   private final static String USER_NAME = "jason";
   private final static String PASSWORD = "123";
 
+  /**
+   * 获取 {@code access_token}，一般有效期为 30 分钟
+   *
+   * <p>调用 API 时必须在 URL 中带上 {@code access_token} 参数</p>
+   *
+   * @param userName 用户名
+   * @param password 密码
+   * @return 鉴权结果
+   */
   @PostMapping("/token")
   public RestResult<AccessTokenDto> getAccessToken(@RequestParam("user_name") String userName, @RequestParam("password") String password) {
     try {
