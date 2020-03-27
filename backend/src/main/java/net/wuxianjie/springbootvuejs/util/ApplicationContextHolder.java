@@ -28,7 +28,7 @@ public class ApplicationContextHolder implements ApplicationContextAware {
    * @throws BeansException 如果无法创建该 bean
    */
   public static <T> T getBean(Class<T> clazz) {
-    return ApplicationContextHolder.applicationContext.getBean(clazz);
+    return applicationContext.getBean(clazz);
   }
 
   /**
@@ -39,7 +39,7 @@ public class ApplicationContextHolder implements ApplicationContextAware {
    * @return 指定 bean 的实例
    */
   public static <T> T getBean(String qualifier, Class<T> clazz) {
-    return ApplicationContextHolder.applicationContext.getBean(qualifier, clazz);
+    return applicationContext.getBean(qualifier, clazz);
   }
 
   @Override

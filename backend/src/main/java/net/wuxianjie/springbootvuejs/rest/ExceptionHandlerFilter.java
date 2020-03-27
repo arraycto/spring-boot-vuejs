@@ -4,12 +4,12 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
 import net.wuxianjie.springbootvuejs.util.JsonUtils;
 import org.springframework.core.Ordered;
@@ -34,14 +34,14 @@ public class ExceptionHandlerFilter implements Filter {
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException {
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
     HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
     try {
       chain.doFilter(request, response);
-    } catch (RuntimeException e) {
-      RestResult<Void> result = getRestResult(httpServletRequest, e);
+    } catch (Exception e) {
+      RestResultDto<Void> result = getRestResult(httpServletRequest, e);
       handleResponse(httpServletResponse, result);
     }
   }
@@ -51,19 +51,21 @@ public class ExceptionHandlerFilter implements Filter {
 
   }
 
-  private RestResult<Void> getRestResult(HttpServletRequest httpServletRequest, RuntimeException e) {
+  private RestResultDto<Void> getRestResult(HttpServletRequest httpServletRequest, Exception e) {
     // 记录过滤器链中出现的运行时异常日志
-    if (!(e instanceof AuthenticationException)) {
-      // 记录非鉴权失败的日志
-      log.error(String.format("请求【%s】时出现异常：%s", httpServletRequest.toString(), e.getMessage()), e);
+    if (e instanceof AuthenticationException) {
+      AuthenticationException authError = (AuthenticationException) e;
+      return new RestResultDto<>(authError.getCode(), authError.getMessage(), null);
     }
 
-    return new RestResult<>(RestCodeEnum.ERROR, e.getMessage());
+    // 记录非鉴权失败的日志
+    log.error(String.format("请求【%s】时出现异常：%s", httpServletRequest.toString(), e.getMessage()), e);
+    return new RestResultDto<>(RestCodeEnum.ERROR_SERVER, e.getMessage(), null);
   }
 
-  private void handleResponse(HttpServletResponse httpServletResponse, RestResult<Void> result)
-      throws IOException {
+  private void handleResponse(HttpServletResponse httpServletResponse, RestResultDto<Void> result) throws IOException {
     httpServletResponse.setHeader("Content-Type", "application/json; charset=utf8");
+    httpServletResponse.setStatus(result.getHttpStatus());
     httpServletResponse.getWriter().write(JsonUtils.toJson(result, true));
   }
 }

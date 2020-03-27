@@ -3,6 +3,11 @@ package net.wuxianjie.springbootvuejs.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Access token 数据传输对象
+ *
+ * @author 吴仙杰
+ */
 @Data
 @AllArgsConstructor
 public class AccessTokenDto {

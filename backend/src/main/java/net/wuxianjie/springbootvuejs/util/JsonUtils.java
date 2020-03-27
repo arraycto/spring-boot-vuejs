@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import net.wuxianjie.springbootvuejs.exception.JsonException;
-import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 
 /**
  * JSON 序列化与反序列化工具类
@@ -29,13 +29,13 @@ public class JsonUtils {
   public static String toJson(Object value, boolean isDateReadable) {
     ObjectMapper mapper = new ObjectMapper();
     if (isDateReadable) {
-      DateFormat df = new SimpleDateFormat(JsonUtils.DATE_TIME_PATTERN);
+      DateFormat df = new SimpleDateFormat(DATE_TIME_PATTERN);
       mapper.setDateFormat(df);
     }
     try {
       return mapper.writeValueAsString(value);
     } catch (JsonProcessingException e) {
-      throw new JsonException(String.format("JSON 序列化【%s】失败：%s", value, e.getMessage()), e, RestCodeEnum.ERROR);
+      throw new JsonException(String.format("JSON 序列化【%s】失败：%s", value, e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
     }
   }
 
@@ -49,11 +49,11 @@ public class JsonUtils {
    * @throws JsonException 当 JSON 反序列化失败时抛出
    */
   public static <T> T parseJson(String json, Class<T> valueType, boolean isDateReadable) {
-    ObjectMapper mapper = JsonUtils.getObjectMapper(isDateReadable);
+    ObjectMapper mapper = getObjectMapper(isDateReadable);
     try {
       return mapper.readValue(json, valueType);
     } catch (IOException e) {
-      throw new JsonException(String.format("JSON 反序列化【%s】失败：%s", json, e.getMessage()), e, RestCodeEnum.ERROR);
+      throw new JsonException(String.format("JSON 反序列化【%s】失败：%s", json, e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
     }
   }
 
@@ -71,18 +71,18 @@ public class JsonUtils {
    * @throws JsonException 当 JSON 反序列化失败时抛出
    */
   public static <T> T parseJson(String json, TypeReference<T> ref, boolean isDateReadable) {
-    ObjectMapper mapper = JsonUtils.getObjectMapper(isDateReadable);
+    ObjectMapper mapper = getObjectMapper(isDateReadable);
     try {
       return mapper.readValue(json, ref);
     } catch (IOException e) {
-      throw new JsonException(String.format("JSON 反序列化【%s】失败：%s", json, e.getMessage()), e, RestCodeEnum.ERROR);
+      throw new JsonException(String.format("JSON 反序列化【%s】失败：%s", json, e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
     }
   }
 
   private static ObjectMapper getObjectMapper(boolean isDateReadable) {
     ObjectMapper mapper = new ObjectMapper();
     if (isDateReadable) {
-      DateFormat df = new SimpleDateFormat(JsonUtils.DATE_TIME_PATTERN);
+      DateFormat df = new SimpleDateFormat(DATE_TIME_PATTERN);
       mapper.setDateFormat(df);
     }
     return mapper;

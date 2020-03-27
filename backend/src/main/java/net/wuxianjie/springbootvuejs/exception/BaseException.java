@@ -1,7 +1,7 @@
 package net.wuxianjie.springbootvuejs.exception;
 
 import lombok.Getter;
-import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 
 /**
  * 自定义运行时异常的基类

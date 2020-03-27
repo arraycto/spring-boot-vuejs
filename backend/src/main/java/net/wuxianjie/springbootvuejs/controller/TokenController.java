@@ -8,9 +8,9 @@ import java.util.Objects;
 import net.wuxianjie.springbootvuejs.cache.CacheManager;
 import net.wuxianjie.springbootvuejs.dto.AccessTokenDto;
 import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
-import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
-import net.wuxianjie.springbootvuejs.rest.RestResult;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import net.wuxianjie.springbootvuejs.security.JwtManager;
+import net.wuxianjie.springbootvuejs.util.DateUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,8 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class TokenController {
 
-  private final static String USER_NAME = "jason";
-  private final static String PASSWORD = "123";
+  /**
+   * 假定 access_token 有效期为 30 分钟
+   */
+  private static final int EXPIRES_MINUTES = 30;
+
+  private static final String USER_NAME = "jason";
+  private static final String PASSWORD = "123";
 
   /**
    * 获取 {@code access_token}，一般有效期为 30 分钟
@@ -38,19 +43,23 @@ public class TokenController {
    * @return 鉴权结果
    */
   @PostMapping("/token")
-  public RestResult<AccessTokenDto> getAccessToken(@RequestParam("user_name") String userName, @RequestParam("password") String password) {
+  public Object getAccessToken(@RequestParam("user_name") String userName, @RequestParam("password") String password) {
     try {
       Thread.sleep(2000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
 
-    if (Objects.equals(USER_NAME, userName) && Objects.equals(PASSWORD, password)) {
-      AccessTokenDto dto = this.generateAccessToken(userName, "ROLE_ADMIN");
-      return new RestResult<>(dto);
-    }
+    boolean isNameRight = Objects.equals(USER_NAME, userName);
+    boolean isPasswordRight = Objects.equals(PASSWORD, password);
 
-    throw new AuthenticationException("用户名或密码错误", RestCodeEnum.ERROR);
+    if (isNameRight && isPasswordRight)
+      return generateAccessToken(userName, "ROLE_ADMIN");
+
+    if (!isNameRight)
+      throw new AuthenticationException("用户名或密码错误", RestCodeEnum.INVALID_CLIENT_ID);
+
+    throw new AuthenticationException("用户名或密码错误", RestCodeEnum.INVALID_CLIENT_SECRET);
   }
 
   /**
@@ -62,7 +71,7 @@ public class TokenController {
    */
   private AccessTokenDto generateAccessToken(String userName, String roles) {
     // 创建 JWT
-    Date expirationTime = getUtcExpiresInMilliseconds();
+    Date expirationTime = DateUtils.getAfterMinutesDate(EXPIRES_MINUTES);
     String accessToken = JwtManager.getInstance().generateAccessToken(expirationTime, userName, roles);
 
     // 加入缓存
@@ -70,16 +79,5 @@ public class TokenController {
     ttlCache.put(userName, accessToken);
 
     return new AccessTokenDto(accessToken, expirationTime.getTime() / 1000);
-  }
-  /**
-   * 获取 30 分钟后的时间
-   *
-   * @return 30 分钟后的时间
-   */
-  private Date getUtcExpiresInMilliseconds() {
-    Instant instant = Instant.now();
-    Duration duration = Duration.ofMinutes(30);
-    Instant instantMinutesLater = instant.plus(duration);
-    return Date.from(instantMinutesLater);
   }
 }

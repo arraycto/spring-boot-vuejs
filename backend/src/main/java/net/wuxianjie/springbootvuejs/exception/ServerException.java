@@ -3,17 +3,17 @@ package net.wuxianjie.springbootvuejs.exception;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 
 /**
- * 鉴权失败的异常
+ * 服务器内部功能（一般为框架级）的异常
  *
  * @author 吴仙杰
  */
-public class AuthenticationException extends BaseException {
+public class ServerException extends BaseException {
 
-  public AuthenticationException(String message, RestCodeEnum code) {
+  public ServerException(String message, RestCodeEnum code) {
     super(message, code);
   }
 
-  public AuthenticationException(String message, Throwable cause,
+  public ServerException(String message, Throwable cause,
       RestCodeEnum code) {
     super(message, cause, code);
   }

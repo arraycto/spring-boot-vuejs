@@ -9,7 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Date;
 import java.util.Map;
 import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
-import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import net.wuxianjie.springbootvuejs.util.ApplicationContextHolder;
 
 /**
@@ -71,7 +71,7 @@ public class JwtManager {
    * 获取对象单例
    */
   public static JwtManager getInstance() {
-    return JwtManager.SingletonHolder.INSTANCE;
+    return SingletonHolder.INSTANCE;
   }
 
   /**
@@ -86,8 +86,8 @@ public class JwtManager {
     return JWT.create()
       // 过期时间
       .withExpiresAt(expirationTime)
-      .withClaim(JwtManager.JWT_PUBLIC_CLAIM_USER_NAME_KEY, username)
-      .withClaim(JwtManager.JWT_PUBLIC_CLAIM_ROLE_NAME_KEY, roles)
+      .withClaim(JWT_PUBLIC_CLAIM_USER_NAME_KEY, username)
+      .withClaim(JWT_PUBLIC_CLAIM_ROLE_NAME_KEY, roles)
       .sign(algorithm);
   }
 
@@ -103,7 +103,7 @@ public class JwtManager {
     try {
       jwt = jwtVerifier.verify(accessToken);
     } catch (JWTVerificationException e) {
-      throw new AuthenticationException(String.format("JWT【%s】验证失败：%s", accessToken, e.getMessage()), RestCodeEnum.ERROR);
+      throw new AuthenticationException(String.format("JWT【%s】验证失败：%s", accessToken, e.getMessage()), RestCodeEnum.INVALID_ACCESS_TOKEN);
     }
     return jwt.getClaims();
   }

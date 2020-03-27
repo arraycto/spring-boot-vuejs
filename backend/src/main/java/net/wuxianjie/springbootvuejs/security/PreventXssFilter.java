@@ -175,16 +175,16 @@ public class PreventXssFilter implements Filter {
         cleanVal = Normalizer.normalize(val, Normalizer.Form.NFD);
         // 忽略 `null` 字符
         cleanVal = cleanVal.replaceAll("\0", "");
-        cleanVal = PreventXssFilter.SCRIPT_TAG_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_SRC_SINGLE_QUOTE_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_SRC_DOUBLE_QUOTE_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_LONESOME_CLOSED_TAG_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_LONESOME_TAG_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_EVAL_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_EXPRESSION_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_JAVASCRIPT_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_VBSCRIPT_PATTERN.matcher(cleanVal).replaceAll("");
-        cleanVal = PreventXssFilter.SCRIPT_ONLOAD_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_TAG_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_SRC_SINGLE_QUOTE_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_SRC_DOUBLE_QUOTE_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_LONESOME_CLOSED_TAG_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_LONESOME_TAG_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_EVAL_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_EXPRESSION_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_JAVASCRIPT_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_VBSCRIPT_PATTERN.matcher(cleanVal).replaceAll("");
+        cleanVal = SCRIPT_ONLOAD_PATTERN.matcher(cleanVal).replaceAll("");
       }
       return cleanVal;
     }

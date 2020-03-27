@@ -15,20 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class BackendController {
 
   @RequestMapping(path = "/hello")
-  public String sayHello() {
+  public Object sayHello() {
     return "Hello Spring Boot & Vue.js";
   }
 
   @RequestMapping(path = "/user/{lastName}/{firstName}", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
-  public long addNewUser(@PathVariable("lastName") String lastName,
+  public Object addNewUser(@PathVariable("lastName") String lastName,
       @PathVariable("firstName") String firstName) {
     return 123456789;
   }
 
   @GetMapping(path = "/user/{id}")
   public Object getUserById(@PathVariable("id") long id) {
-
     return new HashMap<String, Object>() {{
       put("firstName", "仙杰");
       put("lastName", "吴");
@@ -37,8 +36,7 @@ public class BackendController {
   }
 
   @RequestMapping(path = "/secured", method = RequestMethod.GET)
-  public @ResponseBody
-  String getSecured() {
+  public @ResponseBody Object getSecured() {
     return "返回来至设保护的资源";
   }
 }

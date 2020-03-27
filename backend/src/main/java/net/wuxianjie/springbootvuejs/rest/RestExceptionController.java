@@ -4,8 +4,10 @@ import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
 import net.wuxianjie.springbootvuejs.exception.BaseException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -30,8 +32,8 @@ public class RestExceptionController {
    * @return 通用结果封装
    */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-  public RestResult<Void> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-    return new RestResult<>(RestCodeEnum.ERROR, e.getMessage());
+  public ResponseEntity<RestResultDto<Void>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    return RestApiUtils.generateError(RestCodeEnum.HTTP_REQUEST_METHOD_NOT_SUPPORTED, e.getMessage());
   }
 
   /**
@@ -41,10 +43,10 @@ public class RestExceptionController {
    * @return 通用结果封装
    */
   @ExceptionHandler(MissingServletRequestParameterException.class)
-  public RestResult<Void> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+  public ResponseEntity<RestResultDto<Void>> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
     String message = String.format("缺少参数【%s】，详细信息：【%s】",e.getParameterName(), e.getMessage());
     log.warn(message);
-    return new RestResult<>(RestCodeEnum.ERROR, message);
+    return RestApiUtils.generateError(RestCodeEnum.MISSING_REQUIRED_PARAMETER, e.getMessage());
   }
 
   /**
@@ -54,7 +56,7 @@ public class RestExceptionController {
    * @return 通用结果封装
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public RestResult<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+  public ResponseEntity<RestResultDto<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
     List<String> errorList = new ArrayList<>();
     BindingResult bindingResult = e.getBindingResult();
     List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -65,7 +67,7 @@ public class RestExceptionController {
 
     String message = Joiner.on("；").join(errorList);
     log.warn(message);
-    return new RestResult<>(RestCodeEnum.ERROR, message);
+    return RestApiUtils.generateError(RestCodeEnum.MALFORMED_PARAMETER, e.getMessage());
   }
 
   /**
@@ -75,8 +77,8 @@ public class RestExceptionController {
    * @return 通用结果封装
    */
   @ExceptionHandler(AuthenticationException.class)
-  public RestResult<Void> handleAuthenticationException(AuthenticationException e) {
-    return new RestResult<>(RestCodeEnum.ERROR, e.getMessage());
+  public ResponseEntity<RestResultDto<Void>> handleAuthenticationException(AuthenticationException e) {
+    return RestApiUtils.generateError(RestCodeEnum.INVALID_ACCESS_TOKEN, e.getMessage());
   }
 
   /**
@@ -86,9 +88,9 @@ public class RestExceptionController {
    * @return 通用结果封装
    */
   @ExceptionHandler(BaseException.class)
-  public RestResult<Void> handleBaseException(BaseException e) {
+  public ResponseEntity<RestResultDto<Void>> handleBaseException(BaseException e) {
     log.error("自定义异常", e);
-    return new RestResult<>(RestCodeEnum.ERROR, e.getMessage());
+    return RestApiUtils.generateError(RestCodeEnum.ERROR_SERVER, e.getMessage());
   }
 
   /**
@@ -98,9 +100,9 @@ public class RestExceptionController {
    * @return 通用结果封装
    */
   @ExceptionHandler(Throwable.class)
-  public RestResult<Void> handleThrowable(Throwable t) {
+  public ResponseEntity<RestResultDto<Void>> handleThrowable(Throwable t) {
     String message = String.format("异常消息【%s】，异常类【%s】", t.getMessage(), t.getClass().getName());
     log.error("默认异常", t);
-    return new RestResult<>(RestCodeEnum.ERROR, message);
+    return RestApiUtils.generateError(RestCodeEnum.ERROR_SERVER, t.getMessage());
   }
 }

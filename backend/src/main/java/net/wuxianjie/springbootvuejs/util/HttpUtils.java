@@ -13,7 +13,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import net.wuxianjie.springbootvuejs.exception.HttpException;
-import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -95,7 +95,7 @@ public class HttpUtils {
         }
       }
     } catch (URISyntaxException e) {
-      throw new HttpException(String.format("构建请求【%s】失败：%s", url, e.getMessage()), e, RestCodeEnum.ERROR);
+      throw new HttpException(String.format("构建请求【%s】失败：%s", url, e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
     }
 
     // 1、创建请求方法的实例，并指定请求 URL
@@ -103,10 +103,10 @@ public class HttpUtils {
     try {
       httpGet = new HttpGet(uriBuilder.build());
     } catch (URISyntaxException e) {
-      throw new HttpException(String.format("构建请求【%s】失败：%s", uriBuilder.toString(), e.getMessage()), e, RestCodeEnum.ERROR);
+      throw new HttpException(String.format("构建请求【%s】失败：%s", uriBuilder.toString(), e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
     }
 
-    return HttpUtils.execute(headers, httpGet, responseCharset);
+    return execute(headers, httpGet, responseCharset);
   }
 
   /**
@@ -137,11 +137,11 @@ public class HttpUtils {
       try {
         httpPost.setEntity(new UrlEncodedFormEntity(paramList, requestCharset));
       } catch (UnsupportedEncodingException e) {
-        throw new HttpException(String.format("构建请求【%s】失败：%s", httpPost.getURI(), e.getMessage()), e, RestCodeEnum.ERROR);
+        throw new HttpException(String.format("构建请求【%s】失败：%s", httpPost.getURI(), e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
       }
     }
 
-    return HttpUtils.execute(headers, httpPost, responseCharset);
+    return execute(headers, httpPost, responseCharset);
   }
 
   /**
@@ -165,11 +165,11 @@ public class HttpUtils {
     try {
       entity = new StringEntity(json);
     } catch (UnsupportedEncodingException e) {
-      throw new HttpException(String.format("构建请求【%s】失败：%s", httpPost.getURI(), e.getMessage()), e, RestCodeEnum.ERROR);
+      throw new HttpException(String.format("构建请求【%s】失败：%s", httpPost.getURI(), e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
     }
     httpPost.setEntity(entity);
 
-    return HttpUtils.execute(headers, httpPost, responseCharset);
+    return execute(headers, httpPost, responseCharset);
   }
 
   /**
@@ -212,7 +212,7 @@ public class HttpUtils {
 
       return result;
     } catch (IOException | NoSuchAlgorithmException | KeyManagementException e) {
-      throw new HttpException(String.format("请求【%s】失败：%s", httpMethod.getURI(), e.getMessage()), e, RestCodeEnum.ERROR);
+      throw new HttpException(String.format("请求【%s】失败：%s", httpMethod.getURI(), e.getMessage()), e, RestCodeEnum.ERROR_SERVER);
     }
     // 5、释放连接
   }

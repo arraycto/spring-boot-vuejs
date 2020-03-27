@@ -1,6 +1,6 @@
 package net.wuxianjie.springbootvuejs.exception;
 
-import net.wuxianjie.springbootvuejs.rest.RestCodeEnum;
+import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 
 /**
  * JSON 解析失败的异常
