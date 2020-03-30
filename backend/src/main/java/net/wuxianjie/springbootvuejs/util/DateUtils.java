@@ -132,6 +132,20 @@ public class DateUtils {
   }
 
   /**
+   * 获取当前多少秒后的日期和时间
+   *
+   * @param seconds 多少秒后，可正可负
+   * @return 当前多少秒后的日期和时间
+   */
+  public static Date getAfterSecondsDate(int seconds) {
+    Instant instant = Instant.now();
+    Duration duration = Duration.ofSeconds(seconds);
+    Instant instantMinutesLater = instant.plus(duration);
+    return Date.from(instantMinutesLater);
+  }
+
+
+  /**
    * 获取当前多少分钟后的日期和时间
    *
    * @param minutes 多少分钟后，可正可负
@@ -140,6 +154,19 @@ public class DateUtils {
   public static Date getAfterMinutesDate(int minutes) {
     Instant instant = Instant.now();
     Duration duration = Duration.ofMinutes(minutes);
+    Instant instantMinutesLater = instant.plus(duration);
+    return Date.from(instantMinutesLater);
+  }
+
+  /**
+   * 获取当前多少天后的日期和时间
+   *
+   * @param days 多少天后，可正可负
+   * @return 当前多少天后的日期和时间
+   */
+  public static Date getAfterDaysDate(int days) {
+    Instant instant = Instant.now();
+    Duration duration = Duration.ofDays(days);
     Instant instantMinutesLater = instant.plus(duration);
     return Date.from(instantMinutesLater);
   }

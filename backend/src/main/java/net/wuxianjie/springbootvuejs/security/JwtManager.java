@@ -20,16 +20,6 @@ import net.wuxianjie.springbootvuejs.util.ApplicationContextHolder;
 public class JwtManager {
 
   /**
-   * JWT 公开声明 - 用户名
-   */
-  public static final String JWT_PUBLIC_CLAIM_USER_NAME_KEY = "username";
-
-  /**
-   * JWT 公开声明 - 用户所拥有的角色名称，以英文逗号分隔
-   */
-  public static final String JWT_PUBLIC_CLAIM_ROLE_NAME_KEY = "role";
-
-  /**
    * 可重用的算法实例，用于 JWT 签名和验证
    *
    * <p>选择 HMAC256 对称加密算法</p>
@@ -86,8 +76,8 @@ public class JwtManager {
     return JWT.create()
       // 过期时间
       .withExpiresAt(expirationTime)
-      .withClaim(JWT_PUBLIC_CLAIM_USER_NAME_KEY, username)
-      .withClaim(JWT_PUBLIC_CLAIM_ROLE_NAME_KEY, roles)
+      .withClaim(SecurityConstants.JWT_PUBLIC_CLAIM_USER_NAME_KEY, username)
+      .withClaim(SecurityConstants.JWT_PUBLIC_CLAIM_ROLE_NAME_KEY, roles)
       .sign(algorithm);
   }
 

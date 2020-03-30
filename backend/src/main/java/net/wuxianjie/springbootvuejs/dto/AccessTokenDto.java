@@ -20,7 +20,7 @@ public class AccessTokenDto {
   /**
    * 过期于，即在什么时间后 {@code access_token} 将过期（单位：秒）
    *
-   * <p>一般为 30 分钟</p>
+   * <p>一般为 30 天</p>
    */
   private long expiresIn;
 }

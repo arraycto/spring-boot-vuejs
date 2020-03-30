@@ -23,9 +23,4 @@
     <version>2.2.5.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-
-  <!-- TODO: 测试看删除后有无问题 -->
-  <!--<properties>
-    <main.basedir>${project.basedir}</main.basedir>
-  </properties>-->
 </project>

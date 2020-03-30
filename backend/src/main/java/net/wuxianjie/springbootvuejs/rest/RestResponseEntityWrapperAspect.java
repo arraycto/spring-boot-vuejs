@@ -5,7 +5,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +32,7 @@ public class RestResponseEntityWrapperAspect {
   public Object wrapControllerResult(ProceedingJoinPoint joinPoint) throws Throwable {
     Object result = joinPoint.proceed();
     if (!(result instanceof ResponseEntity)) {
-      return new ResponseEntity<>(result, HttpStatus.OK);
+      return RestApiUtils.generateSuccess(result);
     }
     return result;
   }

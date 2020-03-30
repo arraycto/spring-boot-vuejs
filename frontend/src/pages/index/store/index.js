@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import login from "../../login/store/loginStore";
+import hello from './helloStore';
 
 Vue.use(Vuex);
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
   },
   modules: {
     // 存放模块
-    login
+    login,
+    hello
   }
 });

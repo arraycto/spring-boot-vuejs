@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  *
  * <p>Spring Security 要求角色名必须大写，且必须以前缀 {@code ROLE_} 开头</p>
  *
+ * <p>而在使用时，可忽略前缀 {@code ROLE_}，比如：{@code @PreAuthorize("hasRole('ADMIN')")}</p>
+ *
  * @author 吴仙杰
  */
 @Configuration

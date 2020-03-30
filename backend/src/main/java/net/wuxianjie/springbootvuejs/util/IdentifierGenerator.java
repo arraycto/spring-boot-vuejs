@@ -13,7 +13,7 @@ public class IdentifierGenerator {
 
   private static final int NUMBER_SYMBOLS = 1;
 
-  private static final int NUMBER_LETTER_SYMBOLS = 2;
+  private static final int NUMBER_LOWERCASE_LETTER_SYMBOLS = 2;
 
 
   /**
@@ -26,7 +26,7 @@ public class IdentifierGenerator {
    *
    * <p>当前为 {@code 数字 + 小写英文字符 + 大写英文字符}</p>
    */
-  private char[] numberLetterSymbols;
+  private char[] numberLowercaseLetterSymbols;
 
   /**
    * 一个经过加密的强随机数生成器
@@ -50,13 +50,8 @@ public class IdentifierGenerator {
     char maxLowercaseChar = 'z';
     StringBuilder lowercaseBuilder = getBuilder(minLowercaseChar, maxLowercaseChar);
 
-    // 构造大写英文字符库
-    char minUppercaseChar = 'A';
-    char maxUppercaseChar = 'Z';
-    StringBuilder uppercaseBuilder = getBuilder(minUppercaseChar, maxUppercaseChar);
-
-    // 拼接大小写英文字符库
-    numberLetterSymbols = numberBuilder.append(lowercaseBuilder).append(uppercaseBuilder).toString().toCharArray();
+    // 拼接小写英文字符库
+    numberLowercaseLetterSymbols = numberBuilder.append(lowercaseBuilder).toString().toCharArray();
   }
 
   /**
@@ -97,14 +92,14 @@ public class IdentifierGenerator {
   }
 
   /**
-   * 生成自定义长度的数字、大小写字母标识符字符串
+   * 生成自定义长度的数字、小写字母标识符字符串
    *
    * @param length 字符长度
    * @return 数字、大小写字母标识符字符串
    * @throws ServerException 当 {@code length} 小于 1 时
    */
   public String generateNumberLetter(int length) {
-    return generateFactory(length, NUMBER_LETTER_SYMBOLS);
+    return generateFactory(length, NUMBER_LOWERCASE_LETTER_SYMBOLS);
   }
 
   /**
@@ -130,7 +125,7 @@ public class IdentifierGenerator {
       if (type == NUMBER_SYMBOLS)
         buffer[i] = numberSymbols[random.nextInt(numberSymbols.length)];
       else
-        buffer[i] = numberLetterSymbols[random.nextInt(numberLetterSymbols.length)];
+        buffer[i] = numberLowercaseLetterSymbols[random.nextInt(numberLowercaseLetterSymbols.length)];
     }
     return new String(buffer);
   }

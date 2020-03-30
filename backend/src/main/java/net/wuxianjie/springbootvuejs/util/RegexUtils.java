@@ -44,16 +44,16 @@ public class RegexUtils {
   /**
    * 匹配用户名
    *
-   * <p>规则：字符串长度至少 2 位最多 15 位，且只能包含中文、数字、字母和下划线（{@code _}）</p>
+   * <p>规则：字符串长度至少 2 位最多 15 位，且只能包含中文、数字、小写字母和下划线（{@code _}）</p>
    */
-  public static final String USERNAME_REGEX = "^[\\u4e00-\\u9fa5a-zA-Z0-9_]{2,15}$";
+  public static final String USERNAME_REGEX = "^[\\u4e00-\\u9fa5a-z0-9_]{2,15}$";
 
   /**
    * 匹配编码命名
    *
-   * <p>规则：字符串长度至少 2 位最多 15 位，以字母或下划线开头，只能包含数字、字母、下划线（{@code _}）</p>
+   * <p>规则：字符串长度至少 2 位最多 15 位，以字母或下划线开头，且只能包含数字、小写字母、下划线（{@code _}）</p>
    */
-  public static final String CODENAME_REGEX = "^[A-Za-z_]\\w{1,14}$";
+  public static final String CODENAME_REGEX = "^[a-z_][a-z0-9_]{1,14}$";
 
   /**
    * 匹配邮箱
