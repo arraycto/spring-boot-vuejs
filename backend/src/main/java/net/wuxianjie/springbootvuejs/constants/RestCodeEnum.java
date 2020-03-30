@@ -17,7 +17,7 @@ import lombok.ToString;
  *   <li>5xx Server Error</li>
  * </ul>
  *
- * <p>注意：在区间 {@code [200..300)} 中的 HTTP 状态码都代表请求成功</p>
+ * <p>其中在 {@code 2xx} 范围内的 HTTP 状态码都代表服务器响应成功</p>
  *
  * <p>项目错误码说明：</p>
  *
@@ -38,6 +38,16 @@ public enum RestCodeEnum {
    * 请求成功，没有任何其他情况
    */
   SUCCESS(200, 0, "SUCCESS"),
+
+  /**
+   * 数据已经创建，无需重复提交
+   */
+  CREATED(201, 0, "Created"),
+
+  /**
+   * 没有内容可响应
+   */
+  NO_CONTENT(204, 0, "No Content"),
 
   /**
    * 客户端 ID 错误，比如：用户名不存在或错误、API Key 不正确等

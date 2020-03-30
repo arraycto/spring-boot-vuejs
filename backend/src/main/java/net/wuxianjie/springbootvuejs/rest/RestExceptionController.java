@@ -46,7 +46,7 @@ public class RestExceptionController {
   public ResponseEntity<RestResultDto<Void>> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
     String message = String.format("缺少参数【%s】，详细信息：【%s】",e.getParameterName(), e.getMessage());
     log.warn(message);
-    return RestApiUtils.generateError(RestCodeEnum.MISSING_REQUIRED_PARAMETER, e.getMessage());
+    return RestApiUtils.generateError(RestCodeEnum.MISSING_REQUIRED_PARAMETER, message);
   }
 
   /**
@@ -67,7 +67,7 @@ public class RestExceptionController {
 
     String message = Joiner.on("；").join(errorList);
     log.warn(message);
-    return RestApiUtils.generateError(RestCodeEnum.MALFORMED_PARAMETER, e.getMessage());
+    return RestApiUtils.generateError(RestCodeEnum.MALFORMED_PARAMETER, message);
   }
 
   /**

@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api/loginApi";
 
 export default {
   namespaced: true,
@@ -41,7 +41,7 @@ export default {
         const { error, message, result } = data;
         if (error === 0) {
           // 登录成功
-          const { accessToken, expiresIn } = result;
+          const { access_token: accessToken, expires_in: expiresIn } = result;
           commit('loginSuccess', { userName, accessToken, expiresIn });
           window.location.replace('/');
         } else {
@@ -50,8 +50,19 @@ export default {
         }
       })
       .catch(error => {
+        let errorMsg;
         // 登录异常
-        commit('loginError', { error: error.toString() });
+        if (error.response) {
+          // 请求完成，并且接收到服务器返回的 HTTP 状态码（非 `2xx` 范围内）及响应结果
+          errorMsg = error.response.data['message'];
+        } else if (error.request) {
+          // 请求完成，但没有接收到来自服务器的响应
+          errorMsg = error.request;
+        } else {
+          // 在建立请求时发生了错误
+          errorMsg = error.message;
+        }
+        commit('loginError', { error: errorMsg });
       });
     }
   },

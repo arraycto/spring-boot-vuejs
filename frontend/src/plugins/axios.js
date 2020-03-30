@@ -7,17 +7,21 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
+  // 在发送 HTTP 请求前
   NProgress.start();
   return config
 },error => {
-  NProgress.start();
+  // 发送 HTTP 请求失败
+  NProgress.done();
   return Promise.reject(error)
 });
 
 instance.interceptors.response.use(response => {
+  // HTTP 状态码 2xx
   NProgress.done();
   return response;
 }, error => {
+  // HTTP 状态码不是 2xx
   NProgress.done();
   return Promise.reject(error);
 });
