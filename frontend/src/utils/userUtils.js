@@ -38,7 +38,7 @@ const autoRefreshToken = (url) => {
   const currentSeconds = new Date().getTime() / 1000; // 精确到秒
   // 当 access token 有效期小于 1 天时刷新，
   const leastValidSeconds = 24 * 60 * 60;
-  if (expiresIn && (expiresIn - currentSeconds > 0) && (expiresIn - currentSeconds < leastValidSeconds) && (url !== '/refresh-token')) {
+  if (expiresIn && (expiresIn - currentSeconds > 0) && (expiresIn - currentSeconds < leastValidSeconds) && (url !== '/token/refresh')) {
     refreshToken(); // 若刷新失败，则会自动取消前端登录缓存
   }
 };

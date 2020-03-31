@@ -6,6 +6,6 @@ export default {
     return instance.post('/token', qs.stringify({ user_name: userName, password }));
   },
   refreshToken() {
-    return instance.get('/refresh-token');
+    return instance.get('/token/refresh');
   }
 };

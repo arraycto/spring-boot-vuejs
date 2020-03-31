@@ -11,12 +11,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 /**
  * Spring Boot 程序主入口
  *
- * <p>{@code @SpringBootApplication} 等同于组合使用以下三个注解的默认配置：</p>
+ * <p>{@code @SpringBootApplication} 等同于组合使用以下四个注解的默认配置：</p>
  *
  * <ul>
- *   <li>{@code @Configuration} - 允许在上下文中注册额外的 bean 或导入其他配置类</li>
- *   <li>{@code @EnableAutoConfiguration} - 启用 Spring Boot 的自动配置机制，搜索该注解类下的所有包</li>
- *   <li>{@code @ComponentScan} - 在应用程序所在位置的包上启用 {@code @Component} 扫描</li>
+ *   <li>{@code @Configuration} - 将该类标记为程序上下文中 bean 定义的源</li>
+ *   <li>{@code @EnableAutoConfiguration} - 告诉 Spring Boot 根据类路径、其他 bean 和各种属性配置来加入 bean</li>
+ *   <li>{@code @EnableWebMvc} - 将程序标记为 web 应用，并激活关键行为。当 Spring Boot 在类路径中发现 {@code spring-webmvc} 时，会自动添加该注解</li>
+ *   <li>{@code @ComponentScan} - 告诉 Spring Boot 在当前包及子包中查找其他控制器（component）、配置（configuration）和服务（service）</li>
  * </ul>
  *
  * <p>4、Spring Boot WAR：Tomcat 需要应用程序符合 Servlet API 3.0 规范，
