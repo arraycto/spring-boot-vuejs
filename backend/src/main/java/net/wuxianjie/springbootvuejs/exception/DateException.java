@@ -13,8 +13,7 @@ public class DateException extends BaseException {
     super(message, code);
   }
 
-  public DateException(String message, Throwable cause,
-      RestCodeEnum code) {
+  public DateException(String message, Throwable cause, RestCodeEnum code) {
     super(message, cause, code);
   }
 }

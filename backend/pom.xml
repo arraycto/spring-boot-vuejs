@@ -46,11 +46,6 @@
       <artifactId>okhttp</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-    </dependency>
-
     <!-- 3、Spring Boot WAR：为确保嵌入式 Servlet 容器不会干扰部署 WAR 包的 Servlet 容器，因此需要将嵌入式 Servlet 容器依赖项标记为 `provided` -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

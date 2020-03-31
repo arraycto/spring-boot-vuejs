@@ -13,8 +13,7 @@ public class HttpException extends BaseException {
     super(message, code);
   }
 
-  public HttpException(String message, Throwable cause,
-      RestCodeEnum code) {
+  public HttpException(String message, Throwable cause, RestCodeEnum code) {
     super(message, cause, code);
   }
 }

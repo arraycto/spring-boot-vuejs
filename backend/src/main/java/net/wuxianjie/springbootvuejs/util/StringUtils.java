@@ -4,7 +4,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
-import net.wuxianjie.springbootvuejs.exception.ServerException;
+import net.wuxianjie.springbootvuejs.exception.IllegalArgumentException;
 
 /**
  * 字符串工具类
@@ -41,7 +41,7 @@ public class StringUtils {
    */
   public static String ellipsis(String src, int maxLength) {
     if (maxLength <= 3)
-      throw new ServerException("原字符串【%s】必须要包含至少 3 个以上的字符", RestCodeEnum.ERROR_SERVER);
+      throw new IllegalArgumentException("原字符串【%s】必须要包含至少 3 个以上的字符", RestCodeEnum.ERROR_SERVER);
     return src.length() > maxLength ? src.substring(0, maxLength - 3) + "..." : src;
   }
 

@@ -2,6 +2,7 @@ package net.wuxianjie.springbootvuejs.util;
 
 import java.security.SecureRandom;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
+import net.wuxianjie.springbootvuejs.exception.IllegalArgumentException;
 import net.wuxianjie.springbootvuejs.exception.ServerException;
 
 /**
@@ -119,7 +120,7 @@ public class IdentifierGenerator {
 
   private String generateFactory(int length, int type) {
     if (length < 1)
-      throw new ServerException("字符串长度不能小于 1", RestCodeEnum.ERROR_SERVER);
+      throw new IllegalArgumentException("字符串长度不能小于 1", RestCodeEnum.ERROR_SERVER);
     char[] buffer = new char[length];
     for (int i = 0, l = buffer.length; i < l; ++i) {
       if (type == NUMBER_SYMBOLS)

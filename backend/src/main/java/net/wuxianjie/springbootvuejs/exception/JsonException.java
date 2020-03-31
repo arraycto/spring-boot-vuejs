@@ -13,8 +13,7 @@ public class JsonException extends BaseException {
     super(message, code);
   }
 
-  public JsonException(String message, Throwable cause,
-      RestCodeEnum code) {
+  public JsonException(String message, Throwable cause, RestCodeEnum code) {
     super(message, cause, code);
   }
 }

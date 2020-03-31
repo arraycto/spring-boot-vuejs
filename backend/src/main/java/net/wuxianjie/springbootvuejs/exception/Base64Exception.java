@@ -13,8 +13,7 @@ public class Base64Exception extends BaseException {
     super(message, code);
   }
 
-  public Base64Exception(String message, Throwable cause,
-      RestCodeEnum code) {
+  public Base64Exception(String message, Throwable cause, RestCodeEnum code) {
     super(message, cause, code);
   }
 }

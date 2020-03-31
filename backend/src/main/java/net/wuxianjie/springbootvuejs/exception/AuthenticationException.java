@@ -13,8 +13,7 @@ public class AuthenticationException extends BaseException {
     super(message, code);
   }
 
-  public AuthenticationException(String message, Throwable cause,
-      RestCodeEnum code) {
+  public AuthenticationException(String message, Throwable cause, RestCodeEnum code) {
     super(message, cause, code);
   }
 }

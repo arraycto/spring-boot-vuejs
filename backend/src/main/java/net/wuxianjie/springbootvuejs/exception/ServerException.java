@@ -13,8 +13,7 @@ public class ServerException extends BaseException {
     super(message, code);
   }
 
-  public ServerException(String message, Throwable cause,
-      RestCodeEnum code) {
+  public ServerException(String message, Throwable cause, RestCodeEnum code) {
     super(message, cause, code);
   }
 }

@@ -104,7 +104,7 @@ public enum RestCodeEnum {
   /**
    * 参数格式错误
    */
-  MALFORMED_PARAMETER(422, 2201, "Parameter Format Error"),
+  MALFORMED_PARAMETER(422, 2202, "Parameter Format Error"),
 
   /**
    * 程序内部运行出错

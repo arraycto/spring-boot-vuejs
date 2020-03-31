@@ -78,7 +78,7 @@ public class RestExceptionController {
    */
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<RestResultDto<Void>> handleAuthenticationException(AuthenticationException e) {
-    return RestApiUtils.generateError(RestCodeEnum.INVALID_ACCESS_TOKEN, e.getMessage());
+    return RestApiUtils.generateError(e.getCode(), e.getMessage());
   }
 
   /**
@@ -90,7 +90,7 @@ public class RestExceptionController {
   @ExceptionHandler(BaseException.class)
   public ResponseEntity<RestResultDto<Void>> handleBaseException(BaseException e) {
     log.error("自定义异常", e);
-    return RestApiUtils.generateError(RestCodeEnum.ERROR_SERVER, e.getMessage());
+    return RestApiUtils.generateError(e.getCode(), e.getMessage());
   }
 
   /**
