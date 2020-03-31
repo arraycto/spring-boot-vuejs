@@ -117,7 +117,7 @@ public class HttpUtils {
             request.method(),
             request.url().toString(),
             param,
-            "响应体为 null"),
+            "客户端没有正确发送请求"),
           RestCodeEnum.ERROR_SERVER);
       String result = responseBody.string();
 
