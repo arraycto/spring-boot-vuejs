@@ -123,9 +123,10 @@ public class HttpUtils {
 
       if (!response.isSuccessful())
         throw new HttpException(
-          String.format("HTTP【%s %s】MIME【%s】参数【%s】请求失败：%s",
+          String.format("HTTP【%s %s %d】MIME【%s】参数【%s】请求失败：%s",
             request.method(),
             request.url().toString(),
+            response.code(),
             request.body() == null ? null : request.body().contentType(),
             param,
             result),
