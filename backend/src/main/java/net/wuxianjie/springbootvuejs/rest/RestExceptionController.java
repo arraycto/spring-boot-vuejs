@@ -102,7 +102,7 @@ public class RestExceptionController {
   @ExceptionHandler(Throwable.class)
   public ResponseEntity<RestResultDto<Void>> handleThrowable(Throwable t) {
     String message = String.format("异常消息【%s】，异常类【%s】", t.getMessage(), t.getClass().getName());
-    log.error("默认异常", t);
-    return RestApiUtils.generateError(RestCodeEnum.ERROR_SERVER, t.getMessage());
+    log.error("默认异常", message);
+    return RestApiUtils.generateError(RestCodeEnum.ERROR_SERVER, message);
   }
 }
