@@ -79,6 +79,9 @@ public enum RestCodeEnum {
    */
   NO_PERMISSION(403, 1006, "No Permission To Access Data"),
 
+  /**
+   * HTTP 请求方法错误
+   */
   HTTP_REQUEST_METHOD_NOT_SUPPORTED(405, 2001, "Http Request Method Not Supported"),
 
   /**

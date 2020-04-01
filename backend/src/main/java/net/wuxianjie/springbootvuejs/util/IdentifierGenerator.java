@@ -3,7 +3,6 @@ package net.wuxianjie.springbootvuejs.util;
 import java.security.SecureRandom;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import net.wuxianjie.springbootvuejs.exception.IllegalArgumentException;
-import net.wuxianjie.springbootvuejs.exception.ServerException;
 
 /**
  * 唯一标识符生成器
@@ -97,7 +96,7 @@ public class IdentifierGenerator {
    *
    * @param length 字符长度
    * @return 数字、大小写字母标识符字符串
-   * @throws ServerException 当 {@code length} 小于 1 时
+   * @throws IllegalArgumentException 当 {@code length} 小于 1 时
    */
   public String generateNumberLetter(int length) {
     return generateFactory(length, NUMBER_LOWERCASE_LETTER_SYMBOLS);
