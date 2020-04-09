@@ -126,7 +126,7 @@
 
   <build>
     <!-- 2、Spring Boot WAR：修改最终的 WAR 文件名，以避免包含版本号 -->
-    <finalName>api</finalName>
+    <finalName>app</finalName>
 
     <plugins>
       <plugin>

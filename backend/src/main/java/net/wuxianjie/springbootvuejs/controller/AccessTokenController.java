@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 吴仙杰
  */
 @RestController
-@RequestMapping("/token")
+@RequestMapping("/api/token")
 public class AccessTokenController {
 
   private final AccessTokenService service;
