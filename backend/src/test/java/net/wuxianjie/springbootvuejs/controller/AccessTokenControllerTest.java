@@ -26,8 +26,8 @@ class AccessTokenControllerTest {
 
   @Test
   public void testAccessTokenShouldReturnAccessToken() throws Exception {
-    when(service.getAccessToken("fake_jason", "fake_123")).thenReturn(new AccessTokenDto("access_token", 1000));
+    when(service.getAccessToken("fake_jason", "fake_123")).thenReturn(new AccessTokenDto("ksjdkfkjk123", 1000));
 
-    mockMvc.perform(post("/api/token").param("user_name", "fake_jason").param("password", "fake_123").accept("application/json; charset=UTF-8")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("expires_in")));
+    mockMvc.perform(post("/token").param("user_name", "fake_jason").param("password", "fake_123").accept("application/json; charset=UTF-8")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("accessToken")));
   }
 }
