@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .anyRequest().authenticated()
       .and()
       .csrf().disable()
-      .addFilterBefore(new SecurityContextFilter(), AuthenticationFilter.class)
-      .addFilter(new AuthenticationFilter());
+      .addFilterBefore(new SecurityContextFilter(), JwtAuthenticationFilter.class)
+      .addFilter(new JwtAuthenticationFilter());
   }
 }

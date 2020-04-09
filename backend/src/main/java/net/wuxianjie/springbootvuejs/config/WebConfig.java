@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * JWT 相关配置
+ * 网站相关配置
  *
  * @author 吴仙杰
  */
 @Configuration
-public class JwtConfig {
+public class WebConfig {
 
   @Value("${jwt.secret}")
   private String jwtSecret;

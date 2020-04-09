@@ -13,10 +13,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import net.wuxianjie.springbootvuejs.cache.CacheManager;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
-import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
+import net.wuxianjie.springbootvuejs.dto.PrincipalDto;
+import net.wuxianjie.springbootvuejs.dto.TokenCacheDto;
+import net.wuxianjie.springbootvuejs.exception.JwtAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -29,15 +30,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  *
  * @author 吴仙杰
  */
-public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   @Override
   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
     HttpServletRequest request = (HttpServletRequest) req;
-    HttpServletResponse response = (HttpServletResponse) res;
 
     if (!isNeedAuthentication(request)) {
-      chain.doFilter(request, response);
+      chain.doFilter(req, res);
       return;
     }
 
@@ -76,7 +76,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     // 1、验证 HTTP URL 中是否存在 `access_token`
     String accessToken = request.getParameter(SecurityConstants.URL_PARAMETER_TOKEN);
     if (Strings.isNullOrEmpty(accessToken))
-      throw new AuthenticationException("【access_token】缺失", RestCodeEnum.MISSING_ACCESS_TOKEN);
+      throw new JwtAuthenticationException("【access_token】缺失", RestCodeEnum.MISSING_ACCESS_TOKEN);
 
     // 2、验证 access token，并获取 JWT 中的声明，失败会抛出异常
     Map<String, Claim> claimMap = JwtManager.getInstance().verifyAccessToken(accessToken);
@@ -88,9 +88,18 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     // 3、查看缓存中是否存在该 access token
     CacheManager cacheManager = CacheManager.getInstance();
     LoadingCache<String, Object> ttlCache = cacheManager.getCache30DaysToLive();
-    String cachedToken = (String) ttlCache.getIfPresent(SecurityConstants.PREFIX_ACCESS_TOKEN_CACHE + userName);
-    if (cachedToken == null || !cachedToken.equals(accessToken))
-      throw new AuthenticationException("【access_token】已过期", RestCodeEnum.EXPIRED_ACCESS_TOKEN);
+    TokenCacheDto cache = (TokenCacheDto) ttlCache.getIfPresent(SecurityConstants.PREFIX_ACCESS_TOKEN_CACHE + userName);
+    if (cache == null)
+      throw new JwtAuthenticationException("【access_token】已过期", RestCodeEnum.EXPIRED_ACCESS_TOKEN);
+
+    String cachedToken = cache.getAccessToken();
+    if (!cachedToken.equals(accessToken))
+      throw new JwtAuthenticationException("【access_token】已更新", RestCodeEnum.EXPIRED_ACCESS_TOKEN);
+
+    // 构造当事人信息
+    PrincipalDto principal = new PrincipalDto();
+    principal.setUserId(cache.getUserId());
+    principal.setUserName(cache.getUserName());
 
     // 密码置空即可
     String password = "";
@@ -103,6 +112,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     .collect(Collectors.joining(", "));
     List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(upperCaseRoles);
 
-    return new UsernamePasswordAuthenticationToken(userName, password, authorityList);
+    return new UsernamePasswordAuthenticationToken(principal, password, authorityList);
   }
 }

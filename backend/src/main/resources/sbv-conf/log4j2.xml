@@ -15,12 +15,18 @@
 
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
+      <!-- 1、以 WAR 部署时，Spring Boot 会自动处理掉 Spring Security 过滤器 `JwtAuthenticationFilter` 中所抛出的自定义认证异常并以 `error` 级别打印日志，且不会再在 `ExceptionHandlerFilter` 中得到异常，故通过以下配置拒绝对 access_token 校验失败时异常的日志记录 -->
+      <RegexFilter regex=".*(access_token).*" onMatch="DENY" onMismatch="ACCEPT"/>
+
       <PatternLayout pattern="${consolePatternLayout}" disableAnsi="false"/>
     </Console>
 
     <!-- 根据当前年和月生成存档文件的目录和文件名 -->
     <RollingFile name="RollingFile" fileName="${baseDir}/${appName}.log"
       filePattern="${baseDir}/$${date:yyyy-MM}/${appName}-%d{yyyy-MM-dd}-%i.log.gz">
+
+      <!-- 1、以 WAR 部署时，Spring Boot 会自动处理掉 Spring Security 过滤器 `JwtAuthenticationFilter` 中所抛出的自定义认证异常并以 `error` 级别打印日志，且不会再在 `ExceptionHandlerFilter` 中得到异常，故通过以下配置拒绝对 access_token 校验失败时异常的日志记录 -->
+      <RegexFilter regex=".*(access_token).*" onMatch="DENY" onMismatch="ACCEPT"/>
 
       <PatternLayout pattern="${filePatternLayout}"/>
 

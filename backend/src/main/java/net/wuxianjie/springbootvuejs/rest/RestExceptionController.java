@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
-import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
 import net.wuxianjie.springbootvuejs.exception.BaseException;
+import net.wuxianjie.springbootvuejs.exception.JwtAuthenticationException;
+import net.wuxianjie.springbootvuejs.exception.RequestArgumentNotValidException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -26,7 +29,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RestExceptionController {
 
   /**
-   * 处理因客户端请求方法与服务端可接受方法不匹配时的异常
+   * 处理因客户端请求方法与服务端可接受方法不一致时的异常
    *
    * @param e 自动注入的异常
    * @return 通用结果封装
@@ -37,6 +40,27 @@ public class RestExceptionController {
   }
 
   /**
+   * 处理因客户端请求头 MIME 与服务端可接受 MIME 不一致时的异常
+   *
+   * @param e 自动注入的异常
+   * @return 通用结果封装
+   */
+  @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+  public ResponseEntity<RestResultDto<Void>> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+    return RestApiUtils.generateError(RestCodeEnum.HTTP_REQUEST_NOT_ACCEPTABLE, e.getMessage());
+  }
+
+  /**
+   * 处理因客户端没有指定服务端必要请求体时的异常
+   *
+   * @return 通用结果封装
+   */
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<RestResultDto<Void>> handleHttpMessageNotReadableException() {
+    return RestApiUtils.generateError(RestCodeEnum.MISSING_REQUIRED_PARAMETER, "缺少所需的请求正文");
+  }
+
+  /**
    * 处理因客户端没有传入服务端必要参数（由 {@code @RequestParam} 指定）时的异常
    *
    * @param e 自动注入的异常
@@ -44,7 +68,7 @@ public class RestExceptionController {
    */
   @ExceptionHandler(MissingServletRequestParameterException.class)
   public ResponseEntity<RestResultDto<Void>> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
-    String message = String.format("缺少参数【%s】，详细信息：【%s】",e.getParameterName(), e.getMessage());
+    String message = String.format("缺少参数【%s】，详细信息：%s",e.getParameterName(), e.getMessage());
     log.warn(message);
     return RestApiUtils.generateError(RestCodeEnum.MISSING_REQUIRED_PARAMETER, message);
   }
@@ -61,7 +85,7 @@ public class RestExceptionController {
     BindingResult bindingResult = e.getBindingResult();
     List<FieldError> fieldErrors = bindingResult.getFieldErrors();
     for (FieldError error : fieldErrors) {
-      String errorMsg = String.format("参数【%s】，值【%s】，校验不通过【%s】", error.getField(), error.getRejectedValue(), error.getDefaultMessage());
+      String errorMsg = String.format("参数【%s】，值【%s】，校验不通过：%s", error.getField(), error.getRejectedValue(), error.getDefaultMessage());
       errorList.add(errorMsg);
     }
 
@@ -71,13 +95,26 @@ public class RestExceptionController {
   }
 
   /**
+   * 处理因客户端参数校验失败时的异常
+   *
+   * @param e 自动注入的异常
+   * @return 通用结果封装
+   */
+  @ExceptionHandler(RequestArgumentNotValidException.class)
+  public ResponseEntity<RestResultDto<Void>> handleRequestArgumentNotValidException(RequestArgumentNotValidException e) {
+    log.warn(e.getMessage());
+    return RestApiUtils.generateError(e.getCode(), e.getMessage());
+  }
+
+  /**
    * 处理因客户端鉴权失败时的异常
    *
    * @param e 自动注入的异常
    * @return 通用结果封装
    */
-  @ExceptionHandler(AuthenticationException.class)
-  public ResponseEntity<RestResultDto<Void>> handleAuthenticationException(AuthenticationException e) {
+  @ExceptionHandler(JwtAuthenticationException.class)
+  public ResponseEntity<RestResultDto<Void>> handleAuthenticationException(
+    JwtAuthenticationException e) {
     return RestApiUtils.generateError(e.getCode(), e.getMessage());
   }
 
@@ -102,7 +139,7 @@ public class RestExceptionController {
   @ExceptionHandler(Throwable.class)
   public ResponseEntity<RestResultDto<Void>> handleThrowable(Throwable t) {
     String message = String.format("异常消息【%s】，异常类【%s】", t.getMessage(), t.getClass().getName());
-    log.error("默认异常", message);
+    log.error("默认异常", t);
     return RestApiUtils.generateError(RestCodeEnum.ERROR_SERVER, message);
   }
 }

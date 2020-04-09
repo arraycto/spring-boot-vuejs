@@ -7,13 +7,13 @@ import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
  *
  * @author 吴仙杰
  */
-public class AuthenticationException extends BaseException {
+public class JwtAuthenticationException extends BaseException {
 
-  public AuthenticationException(String message, RestCodeEnum code) {
+  public JwtAuthenticationException(String message, RestCodeEnum code) {
     super(message, code);
   }
 
-  public AuthenticationException(String message, Throwable cause, RestCodeEnum code) {
+  public JwtAuthenticationException(String message, Throwable cause, RestCodeEnum code) {
     super(message, cause, code);
   }
 }

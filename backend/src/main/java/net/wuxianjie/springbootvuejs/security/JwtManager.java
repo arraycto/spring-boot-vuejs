@@ -8,7 +8,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Date;
 import java.util.Map;
-import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
+import net.wuxianjie.springbootvuejs.exception.JwtAuthenticationException;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import net.wuxianjie.springbootvuejs.util.ApplicationContextHolder;
 
@@ -86,14 +86,14 @@ public class JwtManager {
    *
    * @param accessToken 需要验证的 token
    * @return 非 {@code null} 的 {@link Map}，包含了在 JWT 中定义的声明
-   * @throws AuthenticationException 当 JWT 验证失败时抛出
+   * @throws JwtAuthenticationException 当 JWT 验证失败时抛出
    */
   public Map<String, Claim> verifyAccessToken(String accessToken) {
     DecodedJWT jwt;
     try {
       jwt = jwtVerifier.verify(accessToken);
     } catch (JWTVerificationException e) {
-      throw new AuthenticationException(String.format("JWT【%s】验证失败：%s", accessToken, e.getMessage()), RestCodeEnum.INVALID_ACCESS_TOKEN);
+      throw new JwtAuthenticationException(String.format("JWT【%s】验证失败：%s", accessToken, e.getMessage()), RestCodeEnum.INVALID_ACCESS_TOKEN);
     }
     return jwt.getClaims();
   }

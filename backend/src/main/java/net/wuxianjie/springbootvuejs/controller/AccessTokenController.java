@@ -1,7 +1,10 @@
 package net.wuxianjie.springbootvuejs.controller;
 
+import java.util.List;
+import net.wuxianjie.springbootvuejs.dto.PrincipalDto;
 import net.wuxianjie.springbootvuejs.service.AccessTokenService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 吴仙杰
  */
 @RestController
-@RequestMapping("/api/token")
+@RequestMapping("/token")
 public class AccessTokenController {
 
   private final AccessTokenService service;
@@ -48,8 +51,13 @@ public class AccessTokenController {
    *
    * @return 包含 access token 等信息的对象
    */
+  @SuppressWarnings("unchecked")
   @GetMapping("/refresh")
   public Object refreshing(Authentication authentication) {
-    return service.refreshAccessToken(authentication);
+
+    PrincipalDto principal = (PrincipalDto) authentication.getPrincipal();
+    List<GrantedAuthority> authorityList = (List<GrantedAuthority>) authentication.getAuthorities();
+
+    return service.refreshAccessToken(principal, authorityList);
   }
 }

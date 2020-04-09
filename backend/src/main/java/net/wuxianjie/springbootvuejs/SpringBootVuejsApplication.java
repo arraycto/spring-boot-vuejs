@@ -1,7 +1,9 @@
 package net.wuxianjie.springbootvuejs;
 
+import java.util.Properties;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -29,14 +31,36 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAspectJAutoProxy
 @EnableAsync
 @MapperScan("net.wuxianjie.springbootvuejs.mapper")
-public class SpringBootVuejsApplication extends SpringBootServletInitializer {
+public class SpringBootVuejsApplication extends SpringBootServletInitializer implements
+  CommandLineRunner {
 
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-    return builder.sources(SpringBootVuejsApplication.class);
+    return builder
+      .sources(SpringBootVuejsApplication.class)
+      .properties(getProperties());
+  }
+
+  @Override
+  public void run(String... args) throws Exception {
+    // 指定 log4j2.xml 外部路径最好的方式是通过向命令行传参：`java -Dlogging.config='/path/to/log4j2.xml' -jar app.jar`
+    // 注意：`application.properties` 中的 `logging.config` 属性并不能按预期方式工作，因为在日志初始化后才会读取 `application.properties` 中的属性
+    // 但如果不想在启用时手动指定参数，则可以通过以下方式告诉 Spring Boot 应用程序在启动时重新配置日志
+    // 缺点：项目的整个启动过程不会被该配置文件读取，但只要自定义代码开始运行，则日志记录器就会按预期方式工作
+    Configurator.initialize(null, "classpath:sbv-conf/log4j2.xml");
   }
 
   public static void main(String[] args) {
-    SpringApplication.run(SpringBootVuejsApplication.class, args);
+    new SpringApplicationBuilder(SpringBootVuejsApplication.class)
+      .sources(SpringBootVuejsApplication.class)
+      .properties(getProperties())
+      .run(args);
+  }
+
+  // 将项目的配置文件提取到 war 包外，
+  private static Properties getProperties() {
+    Properties props = new Properties();
+    props.put("spring.config.location", "classpath:sbv-conf/");
+    return props;
   }
 }

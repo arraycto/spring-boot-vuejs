@@ -126,7 +126,7 @@
 
   <build>
     <!-- 2、Spring Boot WAR：修改最终的 WAR 文件名，以避免包含版本号 -->
-    <finalName>${artifactId}</finalName>
+    <finalName>api</finalName>
 
     <plugins>
       <plugin>
@@ -161,6 +161,17 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+          <!-- 不将配置文件打包进 WAR，在部署时只要将 resources/sbv-conf 文件夹拷贝至 tomcat/lib 目录中即可 -->
+          <packagingExcludes>
+            **/sbv-conf/
+          </packagingExcludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>

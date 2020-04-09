@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
-import net.wuxianjie.springbootvuejs.exception.AuthenticationException;
+import net.wuxianjie.springbootvuejs.exception.JwtAuthenticationException;
 import net.wuxianjie.springbootvuejs.util.JsonUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -53,8 +53,8 @@ public class ExceptionHandlerFilter implements Filter {
 
   private RestResultDto<Void> getRestResult(HttpServletRequest httpServletRequest, Exception e) {
     // 记录过滤器链中出现的运行时异常日志
-    if (e instanceof AuthenticationException) {
-      AuthenticationException authError = (AuthenticationException) e;
+    if (e instanceof JwtAuthenticationException) {
+      JwtAuthenticationException authError = (JwtAuthenticationException) e;
       return new RestResultDto<>(authError.getCode(), authError.getMessage(), null);
     }
 

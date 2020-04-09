@@ -35,7 +35,7 @@ import lombok.ToString;
 public enum RestCodeEnum {
 
   /**
-   * 请求成功，没有任何其他情况
+   * 请求成功
    */
   SUCCESS(200, 0, "SUCCESS"),
 
@@ -80,9 +80,19 @@ public enum RestCodeEnum {
   NO_PERMISSION(403, 1006, "No Permission To Access Data"),
 
   /**
-   * HTTP 请求方法错误
+   * 未找所请求的服务
    */
-  HTTP_REQUEST_METHOD_NOT_SUPPORTED(405, 2001, "Http Request Method Not Supported"),
+  Not_Found(404, 2001, "No Message Available"),
+
+  /**
+   * HTTP 请求方法与服务端可接受的方法不一致
+   */
+  HTTP_REQUEST_METHOD_NOT_SUPPORTED(405, 2001, "HTTP Request Method Not Supported"),
+
+  /**
+   * HTTP 请求头 MIME 与服务端 MIME 不一致
+   */
+  HTTP_REQUEST_NOT_ACCEPTABLE(406, 2002, "HTTP Request Not Acceptable"),
 
   /**
    * 每天流量超限额
@@ -115,6 +125,11 @@ public enum RestCodeEnum {
   ERROR_SERVER(500, 3001, "Server Error"),
 
   /**
+   * 当 HTTP 状态码还没有对应任意一个错误码时
+   */
+  NO_MAPPING_HTTP_STATUS(500, 3002, "No Mapping HTTP Status"),
+
+  /**
    * 调用外部服务不可用
    */
   ERROR_INVOKE(503, 4001, "Invoke Error");
@@ -136,4 +151,34 @@ public enum RestCodeEnum {
    */
   @Getter
   private final String message;
+
+  /**
+   * 返回指定数值的枚举常量
+   *
+   * @param httpStatus HTTP 状态码
+   * @return 指定 HTTP 状态码的枚举常量，若有多个则随机返回一个
+   * @throws IllegalArgumentException 当未找到与指定 HTTP 状态码相关匹配的枚举常量时
+   */
+  public static RestCodeEnum valueOf(int httpStatus) {
+    RestCodeEnum codeEnum = resolve(httpStatus);
+    if (codeEnum == null) {
+      throw new IllegalArgumentException(String.format("未找到与 HTTP 状态码【%d】所匹配的错误码", httpStatus));
+    }
+    return codeEnum;
+  }
+
+  /**
+   * 如果可能，将给定的 HTTP 状态代码解析为 {@code RestCodeEnum}
+   *
+   * @param httpStatus HTTP 状态代码（可能是非标准的）
+   * @return 对应的 {@code RestCodeEnum}，或 {@code null}（如果没有找到）
+   */
+  public static RestCodeEnum resolve(int httpStatus) {
+    for (RestCodeEnum item : values()) {
+      if (item.httpStatus == httpStatus) {
+        return item;
+      }
+    }
+    return null;
+  }
 }
