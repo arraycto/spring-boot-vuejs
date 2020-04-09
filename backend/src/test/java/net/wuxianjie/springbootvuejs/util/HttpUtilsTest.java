@@ -10,12 +10,10 @@ class HttpUtilsTest {
 
   @Test
   public void testGet() {
-    Map<String, String> params = new HashMap<String, String>() {
-      {
-        put("name", "Jason Wu");
-        put("age", "25");
-      }
-    };
+    Map<String, String> params = new HashMap<String, String>() {{
+      put("name", "Jason Wu");
+      put("age", "25");
+    }};
 
     String response = HttpUtils.get("http://httpbin.org/get", params);
     System.out.println(response);

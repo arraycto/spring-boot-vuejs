@@ -6,6 +6,7 @@ import net.wuxianjie.springbootvuejs.controller.AccessTokenController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 /**
  * <p>{@code @SpringBootTest} 注解告诉 Spring Boot 去寻找一个主配置类（例如，一个带有 {@code @SpringBootApplication} 的类），然后使用该类来启动 Spring 应用程序上下文</p>
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author 吴仙杰
  */
 @SpringBootTest
+@TestPropertySource(locations = "classpath:/sbv-conf/application.properties")
 public class SpringBootVuejsApplicationTest {
 
   /**

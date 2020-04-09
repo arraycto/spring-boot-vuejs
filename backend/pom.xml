@@ -137,8 +137,9 @@
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
+          <!-- 拷贝前端静态内容 -->
           <execution>
-            <id>拷贝前端静态内容</id>
+            <id>copy Vue.js frontend content</id>
             <phase>generate-resources</phase>
             <goals>
               <goal>copy-resources</goal>

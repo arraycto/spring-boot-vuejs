@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.TestPropertySource;
 
 /**
  * 启动服务器进行测试
@@ -17,6 +18,7 @@ import org.springframework.boot.web.server.LocalServerPort;
  * @author 吴仙杰
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "classpath:/sbv-conf/application.properties")
 public class HttpRequestTest {
 
   /**
@@ -33,6 +35,6 @@ public class HttpRequestTest {
 
   @Test
   public void testShouldReturnNeedAccessTokenMessage() {
-    assertThat(restTemplate.getForObject("http://localhost:" + port + "/", String.class)).contains("【access_token】缺失");
+    assertThat(restTemplate.getForObject("http://localhost:" + port + "/api", String.class)).contains("【access_token】缺失");
   }
 }
