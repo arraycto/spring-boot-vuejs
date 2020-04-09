@@ -3,6 +3,7 @@ package net.wuxianjie.springbootvuejs;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import net.wuxianjie.springbootvuejs.controller.AccessTokenController;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ import org.springframework.test.context.TestPropertySource;
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:/sbv-conf/application.properties")
+@Disabled
 public class SpringBootVuejsApplicationTest {
 
   /**

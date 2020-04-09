@@ -19,6 +19,11 @@ glob.sync('./src/pages/**/main.js').forEach(path => {
 });
 
 module.exports = {
+  // 配置生产环境下非根路径的静态资源访问子路径
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/app/'
+    : '/',
+
   // 以多页模式构建应用
   pages,
 
