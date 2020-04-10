@@ -21,7 +21,7 @@ glob.sync('./src/pages/**/main.js').forEach(path => {
 module.exports = {
   // 配置生产环境下非根路径的静态资源访问子路径
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/app/'
+    ? '/app/' // 最终打包进后端后的服务器上下文路径
     : '/',
 
   // 以多页模式构建应用
@@ -42,11 +42,14 @@ module.exports = {
   },
 
   // 配置前端开发服务器 webpack dev-server
-  // 将前端（如 Axios）所有以 `/api` 为基准路径的请求都代理至后端服务
+  // 将前端（如 Axios）所有以 `/app` 为基准路径的请求都代理至后端服务
   devServer: {
+    // https://github.com/webpack/webpack-dev-server/issues/416#issuecomment-287797086
+    host: 'localhost',
+    port: 8091,
     proxy: {
-      '/api': {
-        target: 'http://localhost:8090/app',
+      '/app': {
+        target: 'http://localhost:8090',
         ws: true,
         changeOrigin: true
       }

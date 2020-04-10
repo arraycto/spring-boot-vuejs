@@ -10,7 +10,7 @@ public class SecurityConstants {
   /**
    * 不需要鉴权的请求地址
    */
-  public static final String[] PERMIT_ALL_PATH = { "/api/token", "/static/**", "/index.html", "/" };
+  public static final String[] PERMIT_ALL_PATH = { "/token", "/static/**", "/", "/favicon.ico", "/login*" };
 
   /**
    * URL 中 token 的参数名

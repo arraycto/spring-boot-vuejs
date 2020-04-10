@@ -1,3 +1,4 @@
+import { ctx } from '../../../plugins/router';
 import api from '../../../api/loginApi';
 import jwt_decode from 'jwt-decode';
 
@@ -32,6 +33,9 @@ export default {
       localStorage.setItem('access_token', accessToken);
       // 过期时间于，相对 UTC 时间的毫秒值
       localStorage.setItem('expires_in', expiresIn);
+
+      // 跳转至首页
+      window.location.replace(`${ctx}/`);
     },
     loginError(state, { error }) {
       state.error = error;
@@ -46,7 +50,6 @@ export default {
           // 请求成功
           const { access_token: accessToken } = data.result;
           commit('loginSuccess', { accessToken });
-          window.location.replace('/');
         })
         .catch(error => {
           // 请求失败

@@ -1,9 +1,14 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import NProgress from "nprogress";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import NProgress from 'nprogress';
 import { isLoggedIn } from '../utils/userUtils';
 
 Vue.use(VueRouter);
+
+// 若 `webpackHotUpdate` 对象存在，则说明当前环境为测试环境
+const isDevelopment = typeof webpackHotUpdate !== 'undefined';
+// 最终打包进后端后的服务器上下文路径
+const ctx = isDevelopment ? '' : '/app';
 
 const getRouter = (routes, indexStore) => {
   const router = new VueRouter({
@@ -16,7 +21,7 @@ const getRouter = (routes, indexStore) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // 只有登录后，才可以访问这些受保护的路由
       // 否则，类似于 HTTP 重定向的行为来跳转到登录页
-      if (!isLoggedIn()) window.location.replace('/login');
+      if (!isLoggedIn()) window.location.replace(`${ctx}/login`);
       else next();
     } else next();
   };
@@ -49,6 +54,6 @@ const getRouter = (routes, indexStore) => {
 };
 
 // 当用户在已登录状态再访问登录页时，自动重定向到首页
-if ((window.location.pathname === '/login') && (isLoggedIn())) window.location.replace('/');
+if ((window.location.pathname === `${ctx}/login`) && (isLoggedIn())) window.location.replace(`${ctx}/`);
 
-export { getRouter };
+export { ctx, getRouter };

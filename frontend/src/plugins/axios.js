@@ -1,15 +1,16 @@
 import axios from 'axios';
-import NProgress from "nprogress";
+import NProgress from 'nprogress';
+import { ctx } from './router';
 import { autoRefreshToken } from '../utils/userUtils';
 
 const instance = axios.create({
-  baseURL: '/api',
+  baseURL: '/app', // 最终打包进后端后的服务器上下文路径
   timeout: 15000
 });
 
 const appendAccessTokenToUrl = (config) => {
   const token = localStorage.getItem('access_token');
-  if (token && !(window.location.pathname === '/login')) {
+  if (token && !(window.location.pathname === `${ctx}/login`)) {
     if (config['params']) config['params']['access_token'] = token;
     else config['params'] = { access_token: token };
     return config;
@@ -43,8 +44,8 @@ const handleErrors = (error) => {
       localStorage.removeItem('access_token');
 
       // 若当前页不是登录页，则重定向回登录页
-      if (!(window.location.pathname === '/login'))
-        window.location.replace('/login');
+      if (!(window.location.pathname === `${ctx}/login`))
+        window.location.replace(`${ctx}/login`);
     }
   } else if (error.request) {
     // 请求完成，但没有接收到来自服务器的响应
