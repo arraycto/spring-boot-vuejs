@@ -165,7 +165,8 @@
           <failOnMissingWebXml>false</failOnMissingWebXml>
           <!-- 不将配置文件打包进 WAR，在部署时只要将 resources/sbv-conf 文件夹拷贝至 tomcat/lib 目录中即可 -->
           <packagingExcludes>
-            **/sbv-conf/
+            **/sbv-conf/,
+            **/rebel.xml
           </packagingExcludes>
         </configuration>
       </plugin>
