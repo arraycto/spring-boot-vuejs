@@ -8,7 +8,7 @@
 npm install -g @vue/cli
 ```
 
-# 运行项目
+# 打包项目
 
 1、进入项目根目录，执行 Maven 打包命令：
 
@@ -16,8 +16,10 @@ npm install -g @vue/cli
 mvn clean package
 ```
 
-2、运行完整（包含前端内容）的 Spring Boot 项目：
+# 部署方式
 
-```bash
-mvn --projects backend spring-boot:run
-```
+1、将 `rest.war` 放置于 `tomcat/webapps` 目录中
+
+2、将 `rest-conf` 放置于 `tomcat/lib` 目录中
+
+3、启动 Tomcat
