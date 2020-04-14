@@ -10,11 +10,11 @@ import lombok.ToString;
  * <p>HTTP 状态码说明：</p>
  *
  * <ul>
- *   <li>1xx Informational</li>
- *   <li>2xx Success</li>
- *   <li>3xx Redirection</li>
- *   <li>4xx Client Error</li>
- *   <li>5xx Server Error</li>
+ *   <li>1xx 告知请求的处理进度和情况</li>
+ *   <li>2xx 成功</li>
+ *   <li>3xx 表示需要进一步操作</li>
+ *   <li>4xx 客户端错误</li>
+ *   <li>5xx 服务器错误</li>
  * </ul>
  *
  * <p>其中在 {@code 2xx} 范围内的 HTTP 状态码都代表服务器响应成功</p>

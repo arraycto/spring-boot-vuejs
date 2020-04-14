@@ -31,8 +31,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAspectJAutoProxy
 @EnableAsync
 @MapperScan("net.wuxianjie.springbootvuejs.mapper")
-public class SpringBootVuejsApplication extends SpringBootServletInitializer implements
-  CommandLineRunner {
+public class SpringBootVuejsApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -42,7 +41,7 @@ public class SpringBootVuejsApplication extends SpringBootServletInitializer imp
   }
 
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
     // 指定 log4j2.xml 外部路径最好的方式是通过向命令行传参：`java -Dlogging.config='/path/to/log4j2.xml' -jar app.jar`
     // 注意：`application.properties` 中的 `logging.config` 属性并不能按预期方式工作，因为在日志初始化后才会读取 `application.properties` 中的属性
     // 但如果不想在启用时手动指定参数，则可以通过以下方式告诉 Spring Boot 应用程序在启动时重新配置日志
