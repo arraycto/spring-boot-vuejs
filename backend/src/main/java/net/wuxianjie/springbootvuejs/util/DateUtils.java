@@ -4,6 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +21,7 @@ import net.wuxianjie.springbootvuejs.exception.DateException;
 /**
  * 日期工具类
  *
- * <p>尽量使用 JDK8 {@code java.time} 包中的日期时间对象</p>
+ * <p>尽量使用 JDK 8 {@code java.time} 包中的日期时间对象</p>
  *
  * @author 吴仙杰
  */
@@ -25,6 +30,158 @@ public class DateUtils {
   public static final String YYYY_MM_DD = "yyyy-MM-dd";
 
   public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+
+  /**
+   * {@link Date} 转换为 {@link LocalDateTime}
+   *
+   * @param date Java 8 前日期对象
+   * @return {@code LocalDateTime} 实例对象
+   */
+  public static LocalDateTime dateToLocalDateTime(Date date) {
+
+    return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+  }
+
+  /**
+   * {@link Calendar} 转换为 {@link LocalDateTime}
+   *
+   * @param cal Java 8 前日期对象
+   * @return {@code LocalDateTime} 实例对象
+   */
+  public static LocalDateTime calendarToLocalDateTime(Calendar cal) {
+
+    return LocalDateTime.ofInstant(cal.toInstant(), ZoneId.systemDefault());
+  }
+
+  /**
+   * 从 {@code 1970-01-01T00:00:00Z} 的纪元开始，以毫秒为单位转换为 {@link LocalDateTime}
+   *
+   * @param epochMilli Java 8 前日期对象
+   * @return {@code LocalDateTime} 实例对象
+   */
+  public static LocalDateTime dateToLocalDateTime(long epochMilli) {
+
+    return Instant.ofEpochMilli(epochMilli).atZone(ZoneId.systemDefault()).toLocalDateTime();
+  }
+
+  /**
+   * {@link LocalDateTime} 转换为 {@link Date}
+   *
+   * @param ldt Java 8 日期时间对象
+   * @return {@code Date} 实例对象
+   */
+  public static Date localDateTimeToDate(LocalDateTime ldt) {
+
+    return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  /**
+   * 获取指定日期的当天开始日期
+   *
+   * @param date 日期对象
+   * @return 开始时间
+   */
+  public static Date getStartOfDay(Date date) {
+
+    LocalDateTime ldt = dateToLocalDateTime(date);
+
+    LocalDate localDate = ldt.toLocalDate();
+
+    LocalDateTime startTime = LocalDateTime.of(localDate, LocalTime.MIN);
+
+    return localDateTimeToDate(startTime);
+  }
+
+  /**
+   * 获取指定日期的当天结束日期
+   *
+   * @param date 日期对象
+   * @return 结束时间
+   */
+  public static Date getEndOfDay(Date date) {
+
+    LocalDateTime ldt = dateToLocalDateTime(date);
+
+    LocalDate localDate = ldt.toLocalDate();
+
+    LocalDateTime endTime = LocalDateTime.of(localDate, LocalTime.MAX);
+
+    return localDateTimeToDate(endTime);
+  }
+
+  /**
+   * 获取指定日期的当月开始日期
+   *
+   * @param date 日期对象
+   * @return 开始时间
+   */
+  public static Date getStartOfMonth(Date date) {
+
+    LocalDateTime ldt = dateToLocalDateTime(date);
+
+    LocalDate localDate = ldt.toLocalDate();
+    localDate = localDate.with(ChronoField.DAY_OF_MONTH, 1);
+
+    LocalDateTime startTime = LocalDateTime.of(localDate, LocalTime.MIN);
+
+    return localDateTimeToDate(startTime);
+  }
+
+  /**
+   * 获取指定日期的当月结束日期
+   *
+   * @param date 日期对象
+   * @return 结束时间
+   */
+  public static Date getEndOfMonth(Date date) {
+
+    LocalDateTime ldt = dateToLocalDateTime(date);
+
+    LocalDate localDate = ldt.toLocalDate();
+    localDate = localDate.with(ChronoField.DAY_OF_MONTH, localDate.lengthOfMonth());
+
+    LocalDateTime endTime = LocalDateTime.of(localDate, LocalTime.MAX);
+
+    return localDateTimeToDate(endTime);
+  }
+
+  /**
+   * 获取指定日期的当年开始日期
+   *
+   * @param date 日期对象
+   * @return 开始时间
+   */
+  public static Date getStartOfYear(Date date) {
+
+    LocalDateTime ldt = dateToLocalDateTime(date);
+
+    LocalDate localDate = ldt.toLocalDate();
+    localDate = localDate.with(ChronoField.MONTH_OF_YEAR, 1);
+    localDate = localDate.with(ChronoField.DAY_OF_MONTH, 1);
+
+    LocalDateTime startTime = LocalDateTime.of(localDate, LocalTime.MIN);
+
+    return localDateTimeToDate(startTime);
+  }
+
+  /**
+   * 获取指定日期的当年结束日期
+   *
+   * @param date 日期对象
+   * @return 结束时间
+   */
+  public static Date getEndOfYear(Date date) {
+
+    LocalDateTime ldt = dateToLocalDateTime(date);
+
+    LocalDate localDate = ldt.toLocalDate();
+    localDate = localDate.with(ChronoField.MONTH_OF_YEAR, 12);
+    localDate = localDate.with(ChronoField.DAY_OF_MONTH, 31);
+
+    LocalDateTime endTime = LocalDateTime.of(localDate, LocalTime.MAX);
+
+    return localDateTimeToDate(endTime);
+  }
 
   /**
    * 从日期字符串中解析出合法的日期对象
@@ -172,40 +329,6 @@ public class DateUtils {
   }
 
   /**
-   * 获取指定月份的第一天的最小日期时间
-   *
-   * @param date 日期对象
-   * @return 指定月份的第一天的最小日期时间
-   */
-  public static Date getFirstDateLeastTimeOfMonth(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-    cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
-    cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
-    cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
-    cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
-    return cal.getTime();
-  }
-
-  /**
-   * 获取指定月份的最后一天的最大日期时间
-   *
-   * @param date 日期对象
-   * @return 指定月份的最后一天的最大日期时间
-   */
-  public static Date getLastDateMaxTimeOfMonth(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-    cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
-    cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
-    cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
-    cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
-    return cal.getTime();
-  }
-
-  /**
    * 获取两个日期的差值
    *
    * @param minuend    作为被减数的日期
@@ -258,37 +381,5 @@ public class DateUtils {
     }
 
     return dates;
-  }
-
-  /**
-   * 获取指定日期的开始时间
-   *
-   * @param date 日期对象
-   * @return 开始时间
-   */
-  public static Date getStartDateTime(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    cal.set(Calendar.HOUR_OF_DAY, 0);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);
-    return cal.getTime();
-  }
-
-  /**
-   * 获取指定日期的结束时间
-   *
-   * @param date 日期对象
-   * @return 结束时间
-   */
-  public static Date getEndDateTime(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    cal.set(Calendar.HOUR_OF_DAY, 23);
-    cal.set(Calendar.MINUTE, 59);
-    cal.set(Calendar.SECOND, 59);
-    cal.set(Calendar.MILLISECOND, 999);
-    return cal.getTime();
   }
 }
