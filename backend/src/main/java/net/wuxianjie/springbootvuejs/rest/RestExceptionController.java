@@ -2,7 +2,12 @@ package net.wuxianjie.springbootvuejs.rest;
 
 import com.google.common.base.Joiner;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springbootvuejs.constants.RestCodeEnum;
 import net.wuxianjie.springbootvuejs.exception.BaseException;
@@ -74,7 +79,7 @@ public class RestExceptionController {
   }
 
   /**
-   * 处理因客户端传参不符合服务端参数要求时的异常
+   * 处理因客户端传参不符合服务端参数要求时的异常（{@code @valid}）
    *
    * @param e 自动注入的异常
    * @return 通用结果封装
@@ -90,6 +95,25 @@ public class RestExceptionController {
     }
 
     String message = Joiner.on("；").join(errorList);
+    log.warn(message);
+    return RestApiUtils.generateError(RestCodeEnum.MALFORMED_PARAMETER, message);
+  }
+
+  /**
+   处理因客户端传参不符合服务端参数要求时的异常（（{@code @Validated}））
+   *
+   * @param e 自动注入的异常
+   * @return 通用结果封装
+   */
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<RestResultDto<Void>> handleConstraintViolationException(ConstraintViolationException e) {
+    Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+    Set<String> messages = new HashSet<>(violations.size());
+    messages.addAll(violations.stream()
+      .map(violation -> String.format("参数【%s】，值【%s】，校验不通过：%s",
+        violation.getPropertyPath(), violation.getInvalidValue(), violation.getMessage()))
+      .collect(Collectors.toSet()));
+    String message = Joiner.on(";").join(messages);
     log.warn(message);
     return RestApiUtils.generateError(RestCodeEnum.MALFORMED_PARAMETER, message);
   }
@@ -113,8 +137,7 @@ public class RestExceptionController {
    * @return 通用结果封装
    */
   @ExceptionHandler(JwtAuthenticationException.class)
-  public ResponseEntity<RestResultDto<Void>> handleAuthenticationException(
-    JwtAuthenticationException e) {
+  public ResponseEntity<RestResultDto<Void>> handleAuthenticationException(JwtAuthenticationException e) {
     return RestApiUtils.generateError(e.getCode(), e.getMessage());
   }
 
