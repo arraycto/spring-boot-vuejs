@@ -180,7 +180,7 @@ public class Base64Utils {
    * @return 经 URL and Filename Safe Base64 变体编码后的字符串
    */
   public static String urlEncodeToString(byte[] src) {
-    return Base64.getMimeEncoder().encodeToString(src);
+    return Base64.getUrlEncoder().encodeToString(src);
   }
 
   /**
